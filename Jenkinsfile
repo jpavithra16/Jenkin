@@ -4,34 +4,35 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                echo 'Checking out code...'
                 checkout scm
             }
         }
 
-        stage('Build') {
+        stage('Install Dependencies') {
             steps {
-                echo 'No build needed for Python script, just a demo'
+                echo 'Installing dependencies...'
+                sh 'pip install -r requirements.txt || echo "No requirements.txt found"'
             }
         }
 
-        stage('Test') {
+        stage('Run Tests') {
             steps {
-                echo 'Running unit tests'
-                bat 'python -m main.py'
-                echo 'Unit tests completed'
+                echo 'Running tests...'
+                sh 'python3 -m unittest test_calculator.py'
             }
         }
     }
 
     post {
         always {
-            echo 'Pipeline finished'
-        }
-        success {
-            echo '✅ Build succeeded!'
+            echo 'Pipeline completed.'
         }
         failure {
-            echo '❌ Build failed!'
+            echo 'Some tests failed.'
+        }
+        success {
+            echo 'All tests passed.'
         }
     }
 }
