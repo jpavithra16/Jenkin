@@ -1,18 +1,24 @@
-import os
-import sys
+# test_calculator.py
+import unittest
+from calculator import add, divide
 
-def main():
-    # Use environment variable or command-line argument to determine build result
-    status = os.getenv("BUILD_STATUS") or (sys.argv[1] if len(sys.argv) > 1 else "success")
+class TestCalculator(unittest.TestCase):
+    # Positive test case
+    def test_add_positive(self):
+        self.assertEqual(add(2, 3), 5)
 
-    print(f"Requested build status: {status}")
+    # Negative test case (incorrect result)
+    def test_add_negative(self):
+        self.assertNotEqual(add(2, 2), 5)
 
-    if status.lower() == "success":
-        print("✅ Build succeeded!")
-        sys.exit(0)
-    else:
-        print("❌ Build failed due to simulated error.")
-        sys.exit(1)
+    # Positive test for divide
+    def test_divide_positive(self):
+        self.assertEqual(divide(10, 2), 5)
+
+    # Negative test case (division by zero)
+    def test_divide_by_zero(self):
+        with self.assertRaises(ValueError):
+            divide(10, 0)
 
 if __name__ == "__main__":
-    main()
+    unittest.main()
