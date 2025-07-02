@@ -9,30 +9,29 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Install Python (Optional)') {
             steps {
-                echo 'Installing dependencies...'
-                sh 'pip install -r requirements.txt || echo "No requirements.txt found"'
+                echo 'Assuming Python is already installed on the Windows agent.'
             }
         }
 
-        stage('Run Tests') {
+        stage('Run Unit Tests') {
             steps {
-                echo 'Running tests...'
-                sh 'python3 -m unittest test_calculator.py'
+                echo 'Running unit tests using Python'
+                bat 'python -m unittest test_calculator.py'
             }
         }
     }
 
     post {
         always {
-            echo 'Pipeline completed.'
-        }
-        failure {
-            echo 'Some tests failed.'
+            echo 'Pipeline finished.'
         }
         success {
-            echo 'All tests passed.'
+            echo '✅ All tests passed.'
+        }
+        failure {
+            echo '❌ Some tests failed.'
         }
     }
 }
